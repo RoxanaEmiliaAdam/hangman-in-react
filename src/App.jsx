@@ -9,7 +9,7 @@ import { WrongGuesses } from "./Components/WrongGuesses";
 function App() {
   const [input, setInput] = useState("");
   const [correctGuesses, setCorrectGuesses] = useState([]);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [wrongGuesses, setWrongGuesses] = useState([]);
   const [displayMessage, setDisplayMessage] = useState("");
   const [nrOfGuesses, setNrOfGuesses] = useState(5);
@@ -18,7 +18,7 @@ function App() {
   function handleStartBtn(e) {
     e.preventDefault(e);
     setInput(input);
-
+    setIsPlaying(true);
     setDisplayMessage("Start guessing the letters...");
   }
   console.log(`input ${input}`);
@@ -62,9 +62,11 @@ function App() {
     };
   }, [correctGuesses, wrongGuesses, isPlaying]);
 
-  console.log(`wrong letter ${wrongGuesses}`);
-  console.log(`correct letter ${correctGuesses}`);
-  console.log(typeof correctGuesses);
+  useEffect(() => {
+    if (nrOfGuesses < 1) {
+      setIsPlaying(false);
+    }
+  }, [nrOfGuesses]);
 
   return (
     <>
@@ -91,6 +93,7 @@ function App() {
         {displayMessage}
         <FinalMessage
           correctGuesses={correctGuesses}
+          wrongGuesses={wrongGuesses}
           nrOfGuesses={nrOfGuesses}
           input={input}
           setIsPlaying={setIsPlaying}

@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { CheckWin } from "./CheckWin";
 
@@ -7,30 +8,31 @@ export function FinalMessage({
   nrOfGuesses,
   input,
   setIsPlaying,
+  wrongGuesses,
 }) {
-  let finalMessage = "";
-  let showHiddenWord = "";
-  let isPlaying = true;
+  const [finalMessage, setFinalMessage] = useState("");
+  console.log(finalMessage);
 
-  if (CheckWin(correctGuesses, nrOfGuesses, input) === "win") {
-    finalMessage = "You Won!";
-    isPlaying = false;
-  } else if (CheckWin(correctGuesses, nrOfGuesses, input) === "loose") {
-    finalMessage = "You Lost...";
-    showHiddenWord = "The hidden word was: ${input}";
-    isPlaying = false;
-  }
+  useEffect(() => {
+    console.log("ok");
+    if (CheckWin(correctGuesses, nrOfGuesses, input) === "win") {
+      setFinalMessage("You Won!");
+      setIsPlaying = false;
+    } else if (CheckWin(correctGuesses, nrOfGuesses, input) === "lose") {
+      setFinalMessage("You Lost...");
 
-  useEffect(() => setIsPlaying(isPlaying));
+      setIsPlaying = false;
+    }
+  }, [correctGuesses, wrongGuesses]);
+  const isGameLost = CheckWin(correctGuesses, nrOfGuesses, input) === "lose";
+
+  //useEffect(() => setIsPlaying(isPlaying));
 
   return (
     <>
-      <div
-        className="final-message"
-        style={finalMessage !== "" ? { visibility: "visible" } : {}}
-      >
+      <div className="final-message">
         <p>{finalMessage}</p>
-        <p>{showHiddenWord}</p>
+        {isGameLost && <p>The hidden word was: {input}</p>}
       </div>
     </>
   );

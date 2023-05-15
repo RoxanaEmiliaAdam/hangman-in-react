@@ -62,7 +62,6 @@ input {
 }
 
 .final-message {
-  visibility: hidden;
   color: rebeccapurple;
 }
 /*#root {
