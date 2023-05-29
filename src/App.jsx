@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import "./App.css";
 import { FinalMessage } from "./Components/FinalMessage";
 import { HiddenWord } from "./Components/HiddenWord";
+
 import { WrongGuesses } from "./Components/WrongGuesses";
 
 function App() {
@@ -21,8 +22,15 @@ function App() {
     setIsPlaying(true);
     setDisplayMessage("Start guessing the letters...");
   }
-  console.log(`input ${input}`);
-  console.log(typeof input);
+
+  function newGameBtn() {
+    setIsPlaying(false);
+    setCorrectGuesses([]);
+    setWrongGuesses([]);
+    setNrOfGuesses(5);
+    setDisplayMessage("");
+    setInput("");
+  }
 
   // Keypress event => replace hidden characters with letters
   useEffect(() => {
@@ -30,29 +38,26 @@ function App() {
       const { key, keyCode } = event;
       if (keyCode >= 65 && keyCode <= 90 && isPlaying) {
         const letter = key.toUpperCase();
-        console.log("a key was pressed", letter);
+
         // correct guess
         if (input.includes(letter)) {
-          if (!correctGuesses.includes(letter)) {
-            setCorrectGuesses((currentLetters) => [...currentLetters, letter]);
-            setDisplayMessage("Correct! Keep Playing...");
-          } else {
-            setDisplayMessage("Letter already used");
-          }
+          setCorrectGuesses((currentLetters) => [...currentLetters, letter]);
+          setDisplayMessage("Correct! Keep Playing...");
+
           //wrong guess
         } else {
           if (!wrongGuesses.includes(letter)) {
             setWrongGuesses((currentLetters) => [...currentLetters, letter]);
             setDisplayMessage("Wrong guess! Try again...");
             setNrOfGuesses((prev) => prev - 1);
-            console.log(`guesses ${nrOfGuesses}`);
           } else {
             setDisplayMessage("Letter already used");
           }
         }
       }
     };
-
+    console.log(`input is ${input}`);
+    console.log(`correct guesses is ${correctGuesses}`);
     // add handler
     window.addEventListener("keydown", handleKeyDown);
 
@@ -90,14 +95,17 @@ function App() {
         <div className="number-of-guesses">
           Guesses left: {nrOfGuesses} of 5
         </div>
-        {displayMessage}
+
         <FinalMessage
           correctGuesses={correctGuesses}
           wrongGuesses={wrongGuesses}
           nrOfGuesses={nrOfGuesses}
           input={input}
           setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying}
+          newGameBtn={newGameBtn}
         />
+        {isPlaying && displayMessage}
       </div>
     </>
   );
