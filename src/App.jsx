@@ -56,8 +56,9 @@ function App() {
         }
       }
     };
-    console.log(`input is ${input}`);
-    console.log(`correct guesses is ${correctGuesses}`);
+    console.log(input);
+
+    console.log(correctGuesses);
     // add handler
     window.addEventListener("keydown", handleKeyDown);
 
@@ -83,6 +84,7 @@ function App() {
             type="password"
             className="guess"
             placeholder="Please type a secret word"
+            value={input}
             onChange={(e) => setInput(e.target.value.toUpperCase())}
           />
           <button className="start_game">Start Game</button>

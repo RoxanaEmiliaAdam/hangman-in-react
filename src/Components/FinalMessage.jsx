@@ -3,10 +3,14 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function CheckWin(correct, guesses, word) {
+  let uniqueArr = [...new Set(word)];
+  console.log(uniqueArr.sort());
+  console.log(correct.sort());
+
   let status = "";
 
   // check if win
-  if (word === correct.join("")) {
+  if (uniqueArr.sort().toString() === correct.sort().toString()) {
     status = "win";
   }
 
@@ -29,19 +33,20 @@ export function FinalMessage({
   useEffect(() => {
     if (CheckWin(correctGuesses, nrOfGuesses, input) === "win") {
       setFinalMessage("You Won!");
-      setIsPlaying = false;
+      setIsPlaying(false);
     } else if (CheckWin(correctGuesses, nrOfGuesses, input) === "lose") {
       setFinalMessage("You Lost...");
-      setIsPlaying = false;
+      setIsPlaying(false);
     }
   }, [correctGuesses, wrongGuesses]);
   const isGameLost = CheckWin(correctGuesses, nrOfGuesses, input) === "lose";
   const isGameWin = CheckWin(correctGuesses, nrOfGuesses, input) === "win";
+  console.log(isGameLost, isGameWin);
 
   return (
     <>
       <div className="final-message">
-        {isPlaying && (isGameLost || isGameWin) && <p>{finalMessage}</p>}
+        {(isGameLost || isGameWin) && <p>{finalMessage}</p>}
         {isGameLost && <p>The hidden word was: {input}</p>}
       </div>
       {(isGameLost || isGameWin) && (
