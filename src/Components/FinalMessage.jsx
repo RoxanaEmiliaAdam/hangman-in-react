@@ -2,16 +2,16 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
-function CheckWin(correct, guesses, word) {
+function CheckWin(correct, guesses, word, gameOn) {
   let uniqueArr = [...new Set(word)];
-  console.log(uniqueArr.sort());
-  console.log(correct.sort());
 
   let status = "";
 
   // check if win
-  if (uniqueArr.sort().toString() === correct.sort().toString()) {
-    status = "win";
+  if (gameOn) {
+    if (uniqueArr.sort().toString() === correct.sort().toString()) {
+      status = "win";
+    }
   }
 
   // check if lose
@@ -31,17 +31,22 @@ export function FinalMessage({
   const [finalMessage, setFinalMessage] = useState("");
 
   useEffect(() => {
-    if (CheckWin(correctGuesses, nrOfGuesses, input) === "win") {
+    if (CheckWin(correctGuesses, nrOfGuesses, input, isPlaying) === "win") {
       setFinalMessage("You Won!");
       setIsPlaying(false);
-    } else if (CheckWin(correctGuesses, nrOfGuesses, input) === "lose") {
+    } else if (
+      CheckWin(correctGuesses, nrOfGuesses, input, isPlaying) === "lose"
+    ) {
       setFinalMessage("You Lost...");
       setIsPlaying(false);
     }
   }, [correctGuesses, wrongGuesses]);
-  const isGameLost = CheckWin(correctGuesses, nrOfGuesses, input) === "lose";
-  const isGameWin = CheckWin(correctGuesses, nrOfGuesses, input) === "win";
-  console.log(isGameLost, isGameWin);
+  const isGameLost =
+    CheckWin(correctGuesses, nrOfGuesses, input, isPlaying) === "lose";
+  const isGameWin =
+    CheckWin(correctGuesses, nrOfGuesses, input, isPlaying) === "win";
+
+  console.log(isGameLost, isGameWin, isPlaying);
 
   return (
     <>
